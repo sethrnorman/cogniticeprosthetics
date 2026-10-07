@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CognitiveProsthetics.AI | Plug-In Executive Function for Neurodivergent Professionals</title>
+  <meta name="description" content="AI-embedded wearable technology providing plug-in executive function for neurodivergent professionals living with ADHD and executive dysfunction.">
+  <style>
+    :root {
+      --bg-primary: #0a0d14;
+      --bg-secondary: #111622;
+      --bg-card: rgba(22, 28, 44, 0.7);
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(99, 102, 241, 0.4);
+      --accent-indigo: #6366f1;
+      --accent-cyan: #38bdf8;
+      --accent-emerald: #10b981;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 24px;
+      --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      font-family: var(--font-stack);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Background Glow */
+    .ambient-glow {
+      position: fixed;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 1000px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(56, 189, 248, 0.05) 50%, rgba(10, 13, 20, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navigation */
+    header {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border-color);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 13, 20, 0.85);
+    }
+
+    .nav-wrapper {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-main);
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+      border-radius: var(--radius-sm);
+      color: white;
+      font-weight: 800;
+      font-size: 0.9rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-sub);
+      text-decoration: none;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+      color: white;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--border-hover);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 96px 0 80px;
+      text-align: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      border-radius: 9999px;
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      color: var(--accent-cyan);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 28px;
+    }
+
+    .hero-badge-pulse {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--accent-cyan);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 5vw, 3.8rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 40%, #a5b4fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--text-sub);
+      max-width: 720px;
+      margin: 0 auto 36px;
+      line-height: 1.65;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .hero-visual {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      margin-top: 32px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      text-align: left;
+    }
+
+    .hero-feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .feature-icon-wrapper {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    .hero-feature-item h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .hero-feature-item p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Section Headers */
+    .section {
+      padding: 90px 0;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 680px;
+      margin: 0 auto 60px;
+    }
+
+    .section-tag {
+      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--accent-indigo);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 2.3rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    /* The Problem / Reality Grid */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .problem-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 32px;
+      position: relative;
+    }
+
+    .problem-card .badge-fail {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 6px;
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      margin-bottom: 16px;
+    }
+
+    .problem-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .problem-card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Core Tech: 3 Auxiliary Loops */
+    .loops-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .loop-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .loop-card:hover {
+      border-color: var(--border-hover);
+      transform: translateY(-4px);
+    }
+
+    .loop-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent-indigo), var(--accent-cyan));
+    }
+
+    .loop-header {
+      margin-bottom: 20px;
+    }
+
+    .loop-target {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .loop-title {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .loop-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+
+    .loop-feature-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--border-color);
+      padding-top: 20px;
+    }
+
+    .loop-feature-list li {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .loop-feature-list li::before {
+      content: "✓";
+      color: var(--accent-cyan);
+      font-weight: bold;
+    }
+
+    /* Privacy Architecture Section */
+    .privacy-box {
+      background: linear-gradient(135deg, rgba(17, 22, 34, 0.9), rgba(26, 33, 52, 0.6));
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+    }
+
+    .privacy-info h3 {
+      font-size: 1.9rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.25;
+    }
+
+    .privacy-info p {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      margin-bottom: 24px;
+      line-height: 1.65;
+    }
+
+    .privacy-specs {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .spec-item {
+      background: rgba(10, 13, 20, 0.6);
+      border: 1px solid var(--border-color);
+      padding: 16px 20px;
+      border-radius: var(--radius-sm);
+    }
+
+    .spec-item strong {
+      display: block;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+
+    .spec-item span {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    /* Team / Founder Section */
+    .founder-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 36px;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .founder-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3730a3, #1e1b4b);
+      border: 3px solid var(--accent-indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: white;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .founder-bio h3 {
+      font-size: 1.6rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .founder-title {
+      color: var(--accent-cyan);
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .founder-bio p {
+      color: var(--text-sub);
+      font-size: 0.95rem;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .badge-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .badge-pill {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    /* Waitlist / Contact CTA Box */
+    .cta-box {
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, rgba(17, 22, 34, 0.8) 100%);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 60px 32px;
+      text-align: center;
+      max-width: 780px;
+      margin: 40px auto 0;
+    }
+
+    .cta-box h2 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .cta-box p {
+      color: var(--text-sub);
+      font-size: 1.05rem;
+      margin-bottom: 32px;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .waitlist-form {
+      display: flex;
+      gap: 12px;
+      max-width: 500px;
+      margin: 0 auto 16px;
+    }
+
+    .form-input {
+      flex: 1;
+      background: rgba(10, 13, 20, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      padding: 12px 18px;
+      color: white;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-indigo);
+    }
+
+    .form-note {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* FAQ Section */
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 24px;
+    }
+
+    .faq-item h4 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-main);
+    }
+
+    .faq-item p {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 48px 0;
+      margin-top: 80px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+    }
+
+    .footer-links a:hover {
+      color: var(--text-main);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      .privacy-box {
+        grid-template-columns: 1fr;
+        padding: 32px;
+      }
+      .founder-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .founder-avatar {
+        margin: 0 auto;
+      }
+      .badge-pill-row {
+        justify-content: center;
+      }
+      .waitlist-form {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- Header -->
+  <header>
+    <div class="container nav-wrapper">
+      <a href="#" class="brand">
+        <span class="brand-badge">CP</span>
+        <span>CognitiveProsthetics<span style="color: var(--accent-cyan);">.AI</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#loops">Core Technology</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="#founder">About Us</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul>
+      <div>
+        <a href="#waitlist" class="btn btn-primary">Join Waitlist</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">
+        <span class="hero-badge-pulse"></span>
+        Plug-In Executive Function for Neurodivergent Professionals
+      </div>
+
+      <h1>
+        If you're missing a limb, you get a prosthetic.<br>
+        <span class="gradient-text">If you're missing executive function, you can too.</span>
+      </h1>
+
+      <p>
+        The world's first codivergent prosthetic device. A discreet, wearable clip designed by and for professionals with ADHD, AuDHD, and executive dysfunction—bridging focus, memory, and task follow-through without screens or planners.
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="#waitlist" class="btn btn-primary" style="padding: 14px 30px; font-size: 1.05rem;">Request Alpha Access</a>
+        <a href="mailto:seth.norman@gmail.com?subject=Investor%20Inquiry%20-%20CognitiveProsthetics.AI" class="btn btn-secondary" style="padding: 14px 28px; font-size: 1.05rem;">Angel & Partner Inquiries</a>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-feature-item">
+          <div class="feature-icon-wrapper">⚡</div>
+          <div>
+            <h3>Dayslong Battery Autonomy</h3>
+            <p>Operates in ultra-low-power event wake states. Put it on your collar in the morning and wear it for days without recharging.</p>
+          </div>
+        </div>
+        <div class="hero-feature-item">
+          <div class="feature-icon-wrapper">🔒</div>
+          <div>
+            <h3>Zero-Compromise Privacy</h3>
+            <p>30-second rolling RAM buffer with local compute offloading. No ambient eavesdropping and zero raw audio sent to third-party clouds.</p>
+          </div>
+        </div>
+        <div class="hero-feature-item">
+          <div class="feature-icon-wrapper">🧠</div>
+          <div>
+            <h3>Natively Neurodivergent</h3>
+            <p>Engineered for how neurodivergent brains actually work—providing silent haptic feedback and context triggers instead of annoying screen alerts.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- The Problem -->
+  <section class="section" id="problem" style="background: rgba(17, 22, 34, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">The Reality</span>
+        <h2 class="section-title">Why Traditional Productivity Tools Fail Us</h2>
+        <p class="section-desc">Desks are littered with graveyards of planners, timer apps, and productivity hacks. They all share the exact same fatal flaw.</p>
+      </div>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <span class="badge-fail">Demanding</span>
+          <h3>Requires the Skills We Lack</h3>
+          <p>Planners and productivity apps require sustained working memory, daily organization, and manual logging—the exact executive functions ADHD brains struggle with.</p>
+        </div>
+
+        <div class="problem-card">
+          <span class="badge-fail">Impractical</span>
+          <h3>Bulky Hardware & Short Battery</h3>
+          <p>Most AI recording devices are the size of battery packs, require constant daily recharging, and look intrusive. They stigmatize instead of blending into daily professional attire.</p>
+        </div>
+
+        <div class="problem-card">
+          <span class="badge-fail">Vulnerable</span>
+          <h3>Cloud Surveillance Risks</h3>
+          <p>Current smart glasses and wearable mics record entire conversations and upload everything to third-party clouds, violating workplace trust and confidentiality laws.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Core Technology: 3 Auxiliary Loops -->
+  <section class="section" id="loops">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Proprietary Technology</span>
+        <h2 class="section-title">Three Auxiliary Prefrontal Loops</h2>
+        <p class="section-desc">Patent-pending auxiliary loops designed to support the exact neural pathways governing memory, emotional regulation, and task completion.</p>
+      </div>
+
+      <div class="loops-container">
+        <!-- Loop 1 -->
+        <div class="loop-card">
+          <div>
+            <div class="loop-header">
+              <span class="loop-target">Memory Function</span>
+              <h3 class="loop-title">Memory Offloading Loop</h3>
+              <p class="loop-desc">Never lose an important detail or deadline again. Captures spoken commitments hands-free and surfaces them contextually when you can actually act.</p>
+            </div>
+            <ul class="loop-feature-list">
+              <li>Voice-to-action hands-free capture</li>
+              <li>Proximity and location-based triggers</li>
+              <li>Predictive contextual retrieval</li>
+              <li>Zero manual note-taking or typing required</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Loop 2 -->
+        <div class="loop-card">
+          <div>
+            <div class="loop-header">
+              <span class="loop-target">Inhibitory Control</span>
+              <h3 class="loop-title">Intention Recovery Loop</h3>
+              <p class="loop-desc">Discreetly supports conversational presence and impulse management during high-stakes meetings, presentations, and team discussions.</p>
+            </div>
+            <ul class="loop-feature-list">
+              <li>Real-time conversation coupling</li>
+              <li>Gentle haptic interruption warnings</li>
+              <li>Discreet impulse mitigation alerts</li>
+              <li>Keeps active listening top of mind</li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Loop 3 -->
+        <div class="loop-card">
+          <div>
+            <div class="loop-header">
+              <span class="loop-target">Cognitive Flexibility</span>
+              <h3 class="loop-title">Executive Actuation Loop</h3>
+              <p class="loop-desc">Bypasses task paralysis and hyperfocus drift. Helps initiate difficult tasks and provides gentle time grounding to stay synchronized with your schedule.</p>
+            </div>
+            <ul class="loop-feature-list">
+              <li>Automatic task decomposition</li>
+              <li>Haptic time-grounding pulses</li>
+              <li>Digital distraction dampening</li>
+              <li>Bridges transition between flow states</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Privacy By Design -->
+  <section class="section" id="privacy">
+    <div class="container">
+      <div class="privacy-box">
+        <div class="privacy-info">
+          <span class="section-tag" style="color: var(--accent-cyan);">Architecture</span>
+          <h3>Private by Design.<br>Enterprise Safe.</h3>
+          <p>We built Cognitive Prosthetics on the fundamental principle that you shouldn't have to sacrifice your personal privacy or workplace confidentiality to get the executive support you need.</p>
+          <a href="#waitlist" class="btn btn-secondary">Learn About Our Security Architecture</a>
+        </div>
+
+        <div class="privacy-specs">
+          <div class="spec-item">
+            <strong>30-Second Local Rolling Buffer</strong>
+            <span>Audio is processed in temporary on-device RAM and discarded immediately once task items are identified.</span>
+          </div>
+          <div class="spec-item">
+            <strong>Zero Continuous Cloud Recording</strong>
+            <span>Your life is not recorded or stored on remote servers. We don't want your private data, and our hardware architecture couldn't retrieve it even if requested.</span>
+          </div>
+          <div class="spec-item">
+            <strong>Workplace & Consent Compliant</strong>
+            <span>Engineered to meet stringent workplace privacy standards, confidentiality guidelines, and FCC Part 15 regulations.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Founder / Team -->
+  <section class="section" id="founder" style="background: rgba(17, 22, 34, 0.4);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Leadership</span>
+        <h2 class="section-title">Built by Lived Experience</h2>
+        <p class="section-desc">Deep founder-market fit combining neurodivergent perspective with proven healthtech execution.</p>
+      </div>
+
+      <div class="founder-card">
+        <div class="founder-avatar">SN</div>
+        <div class="founder-bio">
+          <h3>Seth Norman</h3>
+          <span class="founder-title">Founder & CEO, CognitiveProsthetics.AI</span>
+          <p>
+            Seth is a serial entrepreneur and digital health product innovator with lifelong lived experience of ADHD (Inattentive Type). Previously, he was an exited co-founder and commercialization leader who built clinical research partnerships across all five University of California Medical Centers. He is a U.S. Army veteran, holds a background in psychology from Penn, and is dedicated to creating assistive technology that solves real-world executive dysfunction.
+          </p>
+          <div class="badge-pill-row">
+            <span class="badge-pill">ADHD Lived Experience</span>
+            <span class="badge-pill">Exited Digital Health Co-Founder</span>
+            <span class="badge-pill">U.S. Army Veteran</span>
+            <span class="badge-pill">Penn Psychology</span>
+            <span class="badge-pill">Sacramento, CA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Common Questions</span>
+        <h2 class="section-title">Frequently Asked Questions</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>Is Cognitive Prosthetics an FDA medical device?</h4>
+          <p>No. Cognitive Prosthetics is purposely developed as a non-clinical consumer wellness and workplace productivity wearable. It does not diagnose, treat, or cure medical conditions; rather, it provides behavioral reinforcement and executive function support.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>Why a dedicated wearable rather than a smartwatch or phone app?</h4>
+          <p>Smartphones and smartwatches are notorious engines of distraction for neurodivergent brains. Screens overwhelm attention, notifications are easily tuned out, and smartwatches suffer from severe battery drain with continuous sensing. A collar clip provides hands-free, screen-free, discreet haptic feedback right where you need it.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>When will devices be available for purchase?</h4>
+          <p>We are currently raising our pre-seed round to fund our 100-unit pilot manufacturing run and launch our initial validation cohort. Join the alpha waitlist below to get updates on early access and pilot opportunities.</p>
+        </div>
+
+        <div class="faq-item">
+          <h4>How can angel investors or partners get in touch?</h4>
+          <p>We are actively connecting with angels, syndicate leads, and clinical advisors. You can reach out directly via email at <a href="mailto:seth.norman@gmail.com" style="color: var(--accent-cyan); text-decoration: none;">seth.norman@gmail.com</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waitlist / CTA -->
+  <section class="section" id="waitlist">
+    <div class="container">
+      <div class="cta-box">
+        <h2>Bring Executive Function into Focus</h2>
+        <p>Join the alpha waitlist to be among the first to experience the world's first codivergent prosthetic wearable.</p>
+        
+        <form class="waitlist-form" onsubmit="event.preventDefault(); document.getElementById('form-success').style.display = 'block'; this.style.display = 'none';">
+          <input type="email" class="form-input" placeholder="Enter your email address" required>
+          <button type="submit" class="btn btn-primary">Request Invite</button>
+        </form>
+
+        <div id="form-success" style="display: none; color: var(--accent-emerald); font-weight: 600; padding: 12px; background: rgba(16, 185, 129, 0.1); border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3); max-width: 400px; margin: 0 auto 16px;">
+          ✓ Thank you! You're on the priority alpha list.
+        </div>
+
+        <p class="form-note">Private & secure. We will never share your email address.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-content">
+      <div>
+        <p style="font-weight: 600; color: var(--text-main); margin-bottom: 4px;">CognitiveProsthetics.AI</p>
+        <p>Plug-In Executive Function for Neurodivergent Professionals • Sacramento, CA</p>
+      </div>
+      <ul class="footer-links">
+        <li><a href="mailto:seth.norman@gmail.com">Contact</a></li>
+        <li><a href="#privacy">Privacy</a></li>
+        <li><a href="https://linkedin.com/in/sethnorman" target="_blank" rel="noopener">LinkedIn</a></li>
+      </ul>
+    </div>
+    <div class="container" style="margin-top: 24px; font-size: 0.8rem; text-align: center; color: var(--text-muted);">
+      © 2026 CognitiveProsthetics.AI. All rights reserved. Patent Pending.
+    </div>
+  </footer>
+
+</body>
+</html>
